@@ -4,7 +4,10 @@ import { useParams } from 'react-router-dom';
 import CharacterRow from '../../components/CharacterRow';
 import EpisodeRow from '../../components/EpisodeRow';
 import { getEpisodeById, getEpisodes } from '../../services/episodeService';
-import { getCharactersByIds } from '../../services/characterService';
+import {
+  getCharactersByIds,
+  getCharacters,
+} from '../../services/characterService';
 
 import type { Episode } from '../../types/Episode';
 import type { Character } from '../../types/Character';
@@ -21,42 +24,58 @@ export default function EpisodeDetails() {
 
   useEffect(() => {
     async function loadEpisode() {
-      try {
-        if (!id) return;
+      if (!id) return;
 
-        const data = await getEpisodeById(id);
+      try {
+        setLoading(true);
+
+        let episodeData: Episode | null = null;
+
+        try {
+          episodeData = await getEpisodeById(id);
+
+          setEpisode(episodeData);
+
+          const characterIds = episodeData.characters
+            .map((url) => url.split('/').pop())
+            .filter(Boolean) as string[];
+
+          const dataCharacters = await getCharactersByIds(characterIds);
+
+          setCharacters(
+            Array.isArray(dataCharacters) ? dataCharacters : [dataCharacters]
+          );
+        } catch (error) {
+          console.error('Episódio não encontrado', error);
+          setEpisode(null);
+          setCharacters([]);
+        }
 
         const dataEpisodes = await getEpisodes();
 
-        const dataCharacters = await getCharactersByIds(
-          data.characters
-            .map((url) => url.split('/').pop())
-            .filter(Boolean) as string[]
-        );
-
         setEpisodes(
           dataEpisodes.results
-            .filter((item: Episode) => item.id !== data.id)
+            .filter((item: Episode) => item.id !== episodeData?.id)
             .slice(0, 8)
         );
 
-        setOtherCharacters(
-          Array.isArray(dataCharacters)
-            ? dataCharacters.slice(0, 8)
-            : [dataCharacters]
-        );
+        if (episodeData) {
+          const characterIds = episodeData.characters
+            .map((url) => url.split('/').pop())
+            .filter(Boolean) as string[];
 
-        setEpisode(data);
+          const dataCharacters = await getCharactersByIds(characterIds);
 
-        const characterIds = data.characters
-          .map((url) => url.split('/').pop())
-          .filter(Boolean) as string[];
+          setOtherCharacters(
+            Array.isArray(dataCharacters)
+              ? dataCharacters.slice(0, 8)
+              : [dataCharacters]
+          );
+        } else {
+          const recommended = await getCharacters();
 
-        const characterData = await getCharactersByIds(characterIds);
-
-        setCharacters(
-          Array.isArray(characterData) ? characterData : [characterData]
-        );
+          setOtherCharacters(recommended.results.slice(0, 8));
+        }
       } catch (error) {
         console.error(error);
       } finally {
@@ -72,7 +91,18 @@ export default function EpisodeDetails() {
   }
 
   if (!episode) {
-    return <main className="p-10">Episódio não encontrado.</main>;
+    return (
+      <main className="mx-auto max-w-7xl px-5 py-10">
+        <p className="ml-5">Episódio não encontrado.</p>
+        <section className="mt-14">
+          <EpisodeRow title="Outros episódios" items={episodes} />
+        </section>
+
+        <section className="mt-14">
+          <CharacterRow title="Outros personagens" items={otherCharacters} />
+        </section>
+      </main>
+    );
   }
 
   return (

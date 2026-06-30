@@ -24,36 +24,47 @@ export default function LocationDetails() {
 
   useEffect(() => {
     async function loadLocation() {
+      if (!id) return;
+
       try {
-        if (!id) return;
+        setLoading(true);
 
-        const data = await getLocationById(id);
+        let locationData: Location | null = null;
 
-        const dataLocation = await getLocations();
+        try {
+          locationData = await getLocationById(id);
 
-        const dataCharacters = await getCharacters();
+          setLocation(locationData);
 
-        setLocation(data);
+          const residentIds = locationData.residents
+            .map((url) => url.split('/').pop())
+            .filter(Boolean) as string[];
+
+          if (residentIds.length) {
+            const residentData = await getCharactersByIds(residentIds);
+
+            setCharacters(
+              Array.isArray(residentData) ? residentData : [residentData]
+            );
+          }
+        } catch (error) {
+          console.error('Local não encontrado', error);
+
+          setLocation(null);
+          setCharacters([]);
+        }
+
+        const locations = await getLocations();
 
         setDataLocations(
-          dataLocation.results
-            .filter((item: Location) => item.id !== data.id)
+          locations.results
+            .filter((item: Location) => item.id !== locationData?.id)
             .slice(0, 8)
         );
 
-        setOtherCharacters(dataCharacters.results.slice(0, 8));
+        const charactersData = await getCharacters();
 
-        const residentIds = data.residents
-          .map((url: string) => url.split('/').pop())
-          .filter(Boolean) as string[];
-
-        if (residentIds.length) {
-          const residentData = await getCharactersByIds(residentIds);
-
-          setCharacters(
-            Array.isArray(residentData) ? residentData : [residentData]
-          );
-        }
+        setOtherCharacters(charactersData.results.slice(0, 8));
       } catch (error) {
         console.error(error);
       } finally {
@@ -69,7 +80,17 @@ export default function LocationDetails() {
   }
 
   if (!location) {
-    return <main className="p-10">Local não encontrado.</main>;
+    return (
+      <main className="p-10">
+        <p className="ml-5">Local não encontrado.</p>
+        <section className="mt-14">
+          <LocationRow title="Outros locais" items={dataLocations} />
+        </section>
+        <section className="mt-14">
+          <CharacterRow title="Outros personagens" items={otherCharacters} />
+        </section>
+      </main>
+    );
   }
 
   return (

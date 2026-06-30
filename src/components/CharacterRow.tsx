@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import type { Character } from '../types/Character';
+import { formatUnknown } from '../utils/formatters';
 
 interface CharacterRowProps {
   title: string;
@@ -99,7 +100,7 @@ export default function CharacterRow({
                   }
                 `}
               >
-                {item.status}
+                {formatUnknown(item.status)}
               </span>
             </div>
 
@@ -113,7 +114,7 @@ export default function CharacterRow({
                 dark:text-white
               "
               >
-                {item.name}
+                {formatUnknown(item.name)}
               </h3>
 
               <div
@@ -125,15 +126,15 @@ export default function CharacterRow({
               "
               >
                 <p>
-                  <b>Species:</b> {item.species}
+                  <b>Species:</b> {formatUnknown(item.species)}
                 </p>
 
                 <p>
-                  <b>Gender:</b> {item.gender}
+                  <b>Gender:</b> {formatUnknown(item.gender)}
                 </p>
 
                 <p>
-                  <b>Status:</b> {item.status}
+                  <b>Status:</b> {formatUnknown(item.status)}
                 </p>
               </div>
 

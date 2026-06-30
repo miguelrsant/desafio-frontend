@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import type { Location } from '../types/Location';
+import { formatUnknown } from '../utils/formatters';
 
 interface LocationRowProps {
   title: string;
@@ -105,7 +106,7 @@ export default function LocationRow({
                 dark:text-white
               "
             >
-              {item.name}
+              {formatUnknown(item.name)}
             </h3>
 
             <div
@@ -118,16 +119,18 @@ export default function LocationRow({
               "
             >
               <p>
-                <b>Tipo:</b> {item.type}
+                <b>Tipo:</b> {formatUnknown(item.type)}
               </p>
 
               <p>
-                <b>Dimensão:</b> {item.dimension}
+                <b>Dimensão:</b> {formatUnknown(item.dimension)}
               </p>
 
               <p>
                 <b>Criado:</b>{' '}
-                {new Date(item.created).toLocaleDateString('pt-BR')}
+                {new Date(formatUnknown(item.created)).toLocaleDateString(
+                  'pt-BR'
+                )}
               </p>
             </div>
 

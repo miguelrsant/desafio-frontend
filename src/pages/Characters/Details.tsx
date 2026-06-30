@@ -22,28 +22,36 @@ export default function CharacterDetails() {
 
   useEffect(() => {
     async function loadData() {
-      try {
-        if (!id) return;
+      if (!id) return;
 
+      try {
         setLoading(true);
 
-        const characterData = await getCharacterById(id);
+        let characterData: Character | null = null;
 
-        setCharacter(characterData);
+        try {
+          characterData = await getCharacterById(id);
 
-        const episodeIds = characterData.episode
-          .map((url: string) => url.split('/').pop())
-          .filter(Boolean) as string[];
+          setCharacter(characterData);
 
-        const episodeData = await getEpisodesByIds(episodeIds);
+          const episodeIds = characterData.episode
+            .map((url: string) => url.split('/').pop())
+            .filter(Boolean) as string[];
 
-        setEpisodes(Array.isArray(episodeData) ? episodeData : [episodeData]);
+          const episodeData = await getEpisodesByIds(episodeIds);
+
+          setEpisodes(Array.isArray(episodeData) ? episodeData : [episodeData]);
+        } catch (error) {
+          console.error('Personagem não encontrado', error);
+          setCharacter(null);
+          setEpisodes([]);
+        }
 
         const recommended = await getCharacters();
 
         setCharacters(
           recommended.results
-            .filter((item) => item.id !== characterData.id)
+            .filter((item) => item.id !== characterData?.id)
             .slice(0, 8)
         );
       } catch (error) {
@@ -67,7 +75,11 @@ export default function CharacterDetails() {
   if (!character) {
     return (
       <main className="mx-auto max-w-7xl px-5 py-10">
-        <p>Personagem não encontrado.</p>
+        <p className="ml-5">Personagem não encontrado.</p>
+
+        <section className="mt-14">
+          <CharacterRow title="Outros personagens" items={characters} />
+        </section>
       </main>
     );
   }

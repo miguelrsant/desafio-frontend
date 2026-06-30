@@ -64,7 +64,7 @@ export default function SearchFilter({
             <option value="">Todos os status</option>
             <option value="Alive">Alive</option>
             <option value="Dead">Dead</option>
-            <option value="unknown">Unknown</option>
+            <option value="unknown">Desconhecido</option>
           </select>
         )}
 

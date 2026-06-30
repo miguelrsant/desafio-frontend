@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import type { Episode } from '../types/Episode';
+import { formatUnknown } from '../utils/formatters';
 
 interface EpisodeRowProps {
   title: string;
@@ -84,7 +85,7 @@ export default function EpisodeRow({
                 dark:text-cyan-300
               "
             >
-              {item.episode}
+              {formatUnknown(item.episode)}
             </span>
 
             <h3
@@ -97,7 +98,7 @@ export default function EpisodeRow({
                 dark:text-white
               "
             >
-              {item.name}
+              {formatUnknown(item.name)}
             </h3>
 
             <div
@@ -110,12 +111,15 @@ export default function EpisodeRow({
               "
             >
               <p>
-                <span className="font-semibold">Exibição:</span> {item.air_date}
+                <span className="font-semibold">Exibição:</span>{' '}
+                {formatUnknown(item.air_date)}
               </p>
 
               <p>
                 <span className="font-semibold">Criado em:</span>{' '}
-                {new Date(item.created).toLocaleDateString('pt-BR')}
+                {new Date(formatUnknown(item.created)).toLocaleDateString(
+                  'pt-BR'
+                )}
               </p>
             </div>
 

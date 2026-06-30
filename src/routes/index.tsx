@@ -13,6 +13,8 @@ import EpisodeDetails from '../pages/Episodes/Details';
 import Locations from '../pages/Locations';
 import LocationDetails from '../pages/Locations/Details';
 
+import NotFound from '../pages/NotFound';
+
 export default function AppRoutes() {
   return (
     <BrowserRouter>
@@ -28,6 +30,8 @@ export default function AppRoutes() {
 
           <Route path="/locations" element={<Locations />} />
           <Route path="/locations/:id" element={<LocationDetails />} />
+
+          <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
     </BrowserRouter>
