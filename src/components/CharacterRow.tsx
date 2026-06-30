@@ -4,16 +4,42 @@ import type { Character } from '../types/Character';
 interface CharacterRowProps {
   title: string;
   items: Character[];
+  layout?: 'row' | 'grid';
 }
 
-export default function CharacterRow({ title, items }: CharacterRowProps) {
+export default function CharacterRow({
+  title,
+  items,
+  layout = 'row',
+}: CharacterRowProps) {
   return (
     <section className="mb-12 ml-5">
       <h2 className="mb-6 text-3xl font-bold text-zinc-900 dark:text-white">
         {title}
       </h2>
 
-      <div className="mr-5 flex gap-6 overflow-x-auto pb-4">
+      <div
+        className={
+          layout === 'grid'
+            ? `
+            grid
+            grid-cols-1
+            gap-6
+            pr-5
+            sm:grid-cols-2
+            lg:grid-cols-3
+            xl:grid-cols-4
+          `
+            : `
+            mr-5
+            flex
+            gap-6
+            overflow-x-auto
+            pb-4
+            scrollbar-thin
+          `
+        }
+      >
         {items.map((item) => (
           <article
             key={item.id}
@@ -30,9 +56,12 @@ export default function CharacterRow({ title, items }: CharacterRowProps) {
               hover:-translate-y-2
               hover:shadow-2xl
               dark:bg-zinc-900
-              px-2
-              py-4
-              pb-6
+
+              ${
+                layout === 'grid'
+                  ? 'w-full'
+                  : ''
+              }
             "
           >
             <div className="relative overflow-hidden">
@@ -51,7 +80,16 @@ export default function CharacterRow({ title, items }: CharacterRowProps) {
 
               <span
                 className={`
-                  absolute top-4 right-4 rounded-full px-3 py-1 text-xs font-semibold text-white
+                  absolute
+                  top-4
+                  right-4
+                  rounded-full
+                  px-3
+                  py-1
+                  text-xs
+                  font-semibold
+                  text-white
+
                   ${
                     item.status === 'Alive'
                       ? 'bg-green-500'
@@ -66,29 +104,44 @@ export default function CharacterRow({ title, items }: CharacterRowProps) {
             </div>
 
             <div className="space-y-2 p-5">
-              <h3 className="truncate text-2xl font-bold text-zinc-900 dark:text-white">
+              <h3
+                className="
+                truncate
+                text-2xl
+                font-bold
+                text-zinc-900
+                dark:text-white
+              "
+              >
                 {item.name}
               </h3>
 
-              <div className="space-y-1 text-sm text-zinc-600 dark:text-zinc-300">
+              <div
+                className="
+                space-y-1
+                text-sm
+                text-zinc-600
+                dark:text-zinc-300
+              "
+              >
                 <p>
-                  <span className="font-semibold">Species:</span> {item.species}
+                  <b>Species:</b> {item.species}
                 </p>
 
                 <p>
-                  <span className="font-semibold">Gender:</span> {item.gender}
+                  <b>Gender:</b> {item.gender}
                 </p>
 
                 <p>
-                  <span className="font-semibold">Status:</span> {item.status}
+                  <b>Status:</b> {item.status}
                 </p>
               </div>
 
               <Link
-                to={`/character/${item.id}`}
+                to={`/characters/${item.id}`}
                 className="
                   mt-5
-                  inline-flex
+                  flex
                   w-full
                   items-center
                   justify-center
@@ -96,16 +149,11 @@ export default function CharacterRow({ title, items }: CharacterRowProps) {
                   bg-gradient-to-r
                   from-cyan-500
                   to-emerald-500
-                  px-4
                   py-3
                   font-semibold
                   text-white
-                  transition-all
-                  duration-300
+                  transition
                   hover:scale-105
-                  hover:from-cyan-400
-                  hover:to-emerald-400
-                  active:scale-95
                 "
               >
                 Saiba mais →

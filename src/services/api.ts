@@ -15,7 +15,7 @@ interface APIResponseEpisode {
   results: Episode[];
 }
 
-const api = axios.create({
+export const api = axios.create({
   baseURL: 'https://rickandmortyapi.com/api',
 });
 

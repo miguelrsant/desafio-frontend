@@ -1,13 +1,23 @@
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { Menu, Moon, Sun, X } from 'lucide-react';
 import { useState } from 'react';
-import { useTheme } from '../hooks/useTheme';
+
 import Logo from '../assets/Logo.png';
+import { useTheme } from '../hooks/useTheme';
+
+const navLinkClass = ({ isActive }: { isActive: boolean }) =>
+  `font-medium transition-colors ${
+    isActive
+      ? 'text-cyan-500'
+      : 'text-zinc-700 hover:text-cyan-500 dark:text-zinc-300'
+  }`;
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const { dark, toggleTheme } = useTheme();
+
+  const closeMenu = () => setMenuOpen(false);
 
   return (
     <header
@@ -24,36 +34,31 @@ export default function Header() {
       "
     >
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
-        <Link to="/" className="flex items-center gap-3">
+        <NavLink to="/" className="flex items-center gap-3" onClick={closeMenu}>
           <div
             className="
-                flex
-                h-14
-                w-14
-                items-center
-                justify-center
-                rounded-2xl
-                bg-white
-                shadow-lg
-                ring-1
-                ring-zinc-200
-                transition-all
-                duration-300
-                hover:scale-105
-                hover:shadow-xl
-
-                dark:bg-zinc-800
-                dark:ring-zinc-700
+              flex
+              h-14
+              w-14
+              items-center
+              justify-center
+              rounded-2xl
+              bg-white
+              shadow-lg
+              ring-1
+              ring-zinc-200
+              transition-all
+              duration-300
+              hover:scale-105
+              hover:shadow-xl
+              dark:bg-zinc-800
+              dark:ring-zinc-700
             "
           >
             <img
               src={Logo}
               alt="Rick and Morty"
-              className="
-                h-10
-                w-10
-                object-contain
-                "
+              className="h-10 w-10 object-contain"
             />
           </div>
 
@@ -64,21 +69,23 @@ export default function Header() {
 
             <p className="text-xs text-zinc-500">Explorer</p>
           </div>
-        </Link>
+        </NavLink>
 
         <nav className="hidden items-center gap-8 md:flex">
-          <Link
-            to="/"
-            className="
-              font-medium
-              text-zinc-700
-              transition
-              hover:text-cyan-500
-              dark:text-zinc-300
-            "
-          >
+          <NavLink to="/" className={navLinkClass}>
             Home
-          </Link>
+          </NavLink>
+          <NavLink to="/characters" className={navLinkClass}>
+            Characters
+          </NavLink>
+
+          <NavLink to="/episodes" className={navLinkClass}>
+            Episodes
+          </NavLink>
+
+          <NavLink to="/locations" className={navLinkClass}>
+            Locations
+          </NavLink>
 
           <button
             onClick={toggleTheme}
@@ -116,13 +123,25 @@ export default function Header() {
           "
         >
           <div className="flex flex-col gap-4 p-6">
-            <Link to="/" className="dark:text-white">
+            <NavLink to="/" className={navLinkClass}>
               Home
-            </Link>
+            </NavLink>
+            <NavLink to="/characters" className={navLinkClass}>
+              Characters
+            </NavLink>
+
+            <NavLink to="/episodes" className={navLinkClass}>
+              Episodes
+            </NavLink>
+
+            <NavLink to="/locations" className={navLinkClass}>
+              Locations
+            </NavLink>
 
             <button
               onClick={toggleTheme}
               className="
+                mt-2
                 flex
                 items-center
                 gap-2
