@@ -4,34 +4,57 @@ import type { Location } from '../types/Location';
 interface LocationRowProps {
   title: string;
   items: Location[];
+  layout?: 'row' | 'grid';
 }
 
-export default function LocationRow({ title, items }: LocationRowProps) {
+export default function LocationRow({
+  title,
+  items,
+  layout = 'row',
+}: LocationRowProps) {
   return (
-    <section className="ml-5 mb-12">
-      <h2 className="mb-6 text-3xl font-bold text-zinc-900 dark:text-white">
+    <section className="mb-12 ml-5">
+      <h2
+        className="
+          mb-6
+          text-3xl
+          font-bold
+          text-zinc-900
+          dark:text-white
+        "
+      >
         {title}
       </h2>
 
       <div
-        className="
-        flex
-        gap-6
-        overflow-x-auto
-        overflow-y-visible
-        px-2
-        py-4
-        pr-8
-      "
+        className={
+          layout === 'grid'
+            ? `
+              grid
+              grid-cols-1
+              gap-6
+              pr-5
+              sm:grid-cols-2
+              lg:grid-cols-3
+              xl:grid-cols-4
+            `
+            : `
+              mr-5
+              flex
+              gap-6
+              overflow-x-auto
+              overflow-y-visible
+              pb-4
+              pr-8
+            `
+        }
       >
         {items.map((item) => (
           <article
             key={item.id}
-            className="
+            className={`
               group
               relative
-              w-72
-              shrink-0
               overflow-hidden
               rounded-2xl
               bg-white
@@ -41,7 +64,6 @@ export default function LocationRow({ title, items }: LocationRowProps) {
               ring-zinc-200
               transition-all
               duration-300
-              ease-out
 
               hover:-translate-y-1
               hover:shadow-2xl
@@ -49,8 +71,9 @@ export default function LocationRow({ title, items }: LocationRowProps) {
 
               dark:bg-zinc-900
               dark:ring-zinc-800
-              dark:hover:ring-emerald-400/40
-            "
+
+              ${layout === 'row' ? 'w-72 shrink-0' : 'w-full'}
+            `}
           >
             <div
               className="
@@ -65,38 +88,51 @@ export default function LocationRow({ title, items }: LocationRowProps) {
                 from-emerald-500
                 to-cyan-500
                 text-3xl
-                transition-all
-                duration-300
+                transition
 
-                group-hover:rotate-12
                 group-hover:scale-110
               "
             >
               🌍
             </div>
 
-            <h3 className="line-clamp-2 text-xl font-bold text-zinc-900 dark:text-white">
+            <h3
+              className="
+                line-clamp-2
+                text-xl
+                font-bold
+                text-zinc-900
+                dark:text-white
+              "
+            >
               {item.name}
             </h3>
 
-            <div className="mt-4 space-y-2 text-sm text-zinc-600 dark:text-zinc-300">
+            <div
+              className="
+                mt-4
+                space-y-2
+                text-sm
+                text-zinc-600
+                dark:text-zinc-300
+              "
+            >
               <p>
-                <span className="font-semibold">Tipo:</span> {item.type}
+                <b>Tipo:</b> {item.type}
               </p>
 
               <p>
-                <span className="font-semibold">Dimensão:</span>{' '}
-                {item.dimension}
+                <b>Dimensão:</b> {item.dimension}
               </p>
 
               <p>
-                <span className="font-semibold">Criado em:</span>{' '}
+                <b>Criado:</b>{' '}
                 {new Date(item.created).toLocaleDateString('pt-BR')}
               </p>
             </div>
 
             <Link
-              to={`/location/${item.id}`}
+              to={`/locations/${item.id}`}
               className="
                 mt-6
                 inline-flex
@@ -110,13 +146,9 @@ export default function LocationRow({ title, items }: LocationRowProps) {
                 py-3
                 font-semibold
                 text-white
-                shadow-md
-                transition-all
-                duration-300
+                transition
 
-                hover:-translate-y-0.5
-                hover:shadow-xl
-                hover:shadow-emerald-500/20
+                hover:scale-105
 
                 active:scale-95
               "
