@@ -10,11 +10,9 @@ interface LocationFilters {
   dimension?: string;
 }
 
-export async function getLocations(page = 1) {
+export async function getLocations(filters: LocationFilters = {}) {
   const response = await api.get<ApiResponse<Location>>('/location', {
-    params: {
-      page,
-    },
+    params: filters,
   });
 
   return response.data;
@@ -28,14 +26,6 @@ export async function getLocationById(id: number | string) {
 
 export async function getLocationsByIds(ids: Array<number | string>) {
   const response = await api.get<Location[]>(`/location/${ids.join(',')}`);
-
-  return response.data;
-}
-
-export async function searchLocations(filters: LocationFilters) {
-  const response = await api.get<ApiResponse<Location>>('/location', {
-    params: filters,
-  });
 
   return response.data;
 }

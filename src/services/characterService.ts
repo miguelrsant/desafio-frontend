@@ -8,14 +8,11 @@ interface CharacterFilters {
   name?: string;
   status?: string;
   species?: string;
-  gender?: string;
 }
 
-export async function getCharacters(page = 1) {
+export async function getCharacters(filters: CharacterFilters = {}) {
   const response = await api.get<ApiResponse<Character>>('/character', {
-    params: {
-      page,
-    },
+    params: filters,
   });
 
   return response.data;
@@ -33,10 +30,21 @@ export async function getCharactersByIds(ids: Array<number | string>) {
   return response.data;
 }
 
-export async function searchCharacters(filters: CharacterFilters) {
-  const response = await api.get<ApiResponse<Character>>('/character', {
-    params: filters,
-  });
+export async function getAllSpecies() {
+  const firstPage = await getCharacters({ page: 1 });
 
-  return response.data;
+  const requests = [];
+
+  for (let page = 2; page <= firstPage.info.pages; page++) {
+    requests.push(getCharacters({ page }));
+  }
+
+  const responses = await Promise.all(requests);
+
+  const allCharacters = [
+    ...firstPage.results,
+    ...responses.flatMap((item) => item.results),
+  ];
+
+  return [...new Set(allCharacters.map((item) => item.species))].sort();
 }

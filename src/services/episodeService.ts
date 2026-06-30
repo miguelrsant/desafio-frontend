@@ -9,11 +9,9 @@ interface EpisodeFilters {
   episode?: string;
 }
 
-export async function getEpisodes(page = 1) {
+export async function getEpisodes(filters: EpisodeFilters = {}) {
   const response = await api.get<ApiResponse<Episode>>('/episode', {
-    params: {
-      page,
-    },
+    params: filters,
   });
 
   return response.data;
@@ -27,14 +25,6 @@ export async function getEpisodeById(id: number | string) {
 
 export async function getEpisodesByIds(ids: Array<number | string>) {
   const response = await api.get<Episode[]>(`/episode/${ids.join(',')}`);
-
-  return response.data;
-}
-
-export async function searchEpisodes(filters: EpisodeFilters) {
-  const response = await api.get<ApiResponse<Episode>>('/episode', {
-    params: filters,
-  });
 
   return response.data;
 }

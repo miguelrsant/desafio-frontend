@@ -8,8 +8,9 @@ interface SearchFilterProps {
   species?: string;
   setSpecies?: (value: string) => void;
 
-  speciesOptions?: string[];
+  speciesOptions?: readonly string[];
 
+  onSearch?: () => void;
   onClear?: () => void;
 }
 
@@ -21,21 +22,12 @@ export default function SearchFilter({
   species,
   setSpecies,
   speciesOptions = [],
+  onSearch,
   onClear,
 }: SearchFilterProps) {
   return (
-    <section
-      className="
-        mb-10
-        rounded-3xl
-        bg-white
-        p-6
-        shadow-lg
-
-        dark:bg-zinc-900
-      "
-    >
-      <div className="grid gap-5 md:grid-cols-3">
+    <section className="mb-10 rounded-3xl bg-white p-6 shadow-lg dark:bg-zinc-900">
+      <div className="grid gap-5 lg:grid-cols-5">
         <input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -48,7 +40,6 @@ export default function SearchFilter({
             px-4
             py-3
             outline-none
-
             dark:border-zinc-700
             dark:text-white
           "
@@ -59,50 +50,21 @@ export default function SearchFilter({
             value={status}
             onChange={(e) => setStatus(e.target.value)}
             className="
-      rounded-xl
-      border
-      border-zinc-200
-      bg-white
-      px-4
-      py-3
-      text-zinc-900
-      shadow-sm
-      outline-none
-      transition
-      focus:border-cyan-500
-
-      dark:border-zinc-700
-      dark:bg-zinc-800
-      dark:text-white
-    "
+              rounded-xl
+              border
+              border-zinc-200
+              bg-white
+              px-4
+              py-3
+              dark:border-zinc-700
+              dark:bg-zinc-800
+              dark:text-white
+            "
           >
-            <option
-              className="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white"
-              value=""
-            >
-              Todos os status
-            </option>
-
-            <option
-              className="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white"
-              value="Alive"
-            >
-              Alive
-            </option>
-
-            <option
-              className="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white"
-              value="Dead"
-            >
-              Dead
-            </option>
-
-            <option
-              className="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white"
-              value="unknown"
-            >
-              Unknown
-            </option>
+            <option value="">Todos os status</option>
+            <option value="Alive">Alive</option>
+            <option value="Dead">Dead</option>
+            <option value="unknown">Unknown</option>
           </select>
         )}
 
@@ -111,58 +73,64 @@ export default function SearchFilter({
             value={species}
             onChange={(e) => setSpecies(e.target.value)}
             className="
-      rounded-xl
-      border
-      border-zinc-200
-      bg-white
-      px-4
-      py-3
-      text-zinc-900
-      shadow-sm
-      outline-none
-      transition
-      focus:border-cyan-500
-
-      dark:border-zinc-700
-      dark:bg-zinc-800
-      dark:text-white
-    "
+              rounded-xl
+              border
+              border-zinc-200
+              bg-white
+              px-4
+              py-3
+              dark:border-zinc-700
+              dark:bg-zinc-800
+              dark:text-white
+            "
           >
-            <option
-              className="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white"
-              value=""
-            >
-              Todas as espécies
-            </option>
+            <option value="">Todas as espécies</option>
 
             {speciesOptions.map((item) => (
-              <option
-                key={item}
-                value={item}
-                className="bg-white text-zinc-900 dark:bg-zinc-800 dark:text-white"
-              >
+              <option key={item} value={item}>
                 {item}
               </option>
             ))}
           </select>
         )}
 
+        {onSearch && (
+          <button
+            onClick={onSearch}
+            className="
+      flex
+      items-center
+      justify-center
+      gap-2
+      rounded-xl
+      bg-cyan-500
+      px-5
+      py-3
+      font-semibold
+      text-white
+      transition
+      hover:bg-cyan-600
+    "
+          >
+            Buscar
+          </button>
+        )}
+
         {onClear && (
           <button
             onClick={onClear}
             className="
-                rounded-xl
-                bg-red-500
-                px-4
-                py-3
-                font-semibold
-                text-white
-                transition
-                hover:bg-red-600
-                cursor-pointer
-                "
+              rounded-xl
+              bg-red-500
+              px-5
+              py-3
+              font-semibold
+              text-white
+              transition
+              hover:bg-red-600
+            "
           >
-            Limpar filtros
+            Limpar
           </button>
         )}
       </div>
