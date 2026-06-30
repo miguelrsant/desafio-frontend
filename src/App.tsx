@@ -6,6 +6,7 @@ import type { Episode } from './types/Episode';
 import CharacterRow from './components/CharacterRow';
 import LocationRow from './components/LocationRow';
 import EpisodeRow from './components/EpisodeRow';
+import './index.css';
 
 function App() {
   const [characterList, setCharacterList] = useState<Character[]>([]);
@@ -28,11 +29,13 @@ function App() {
 
   return (
     <>
-      <section className="lists">
-        <CharacterRow title="Personagens" items={characterList} />
-        <LocationRow title="Localizações" items={locationList} />
-        <EpisodeRow title="Episódios" items={episodeList} />
-      </section>
+      <main className="main-h-sceen bg-zinc-950 text-white">
+        <section className="lists pt-24">
+          <CharacterRow title="Personagens" items={characterList} />
+          <LocationRow title="Localizações" items={locationList} />
+          <EpisodeRow title="Episódios" items={episodeList} />
+        </section>
+      </main>
     </>
   );
 }
