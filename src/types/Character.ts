@@ -4,4 +4,5 @@ export interface Character {
   image: string;
   gender: string;
   species: string;
+  status: string;
 }
