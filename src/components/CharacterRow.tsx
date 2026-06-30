@@ -1,11 +1,11 @@
 import type { Character } from '../types/Character';
 
-interface MovieRowProps {
+interface CharacterRowProps {
   title: string;
   items: Character[];
 }
 
-export default function MovieRow({ title, items }: MovieRowProps) {
+export default function CharacterRow({ title, items }: CharacterRowProps) {
   return (
     <>
       <h1>{title}</h1>
