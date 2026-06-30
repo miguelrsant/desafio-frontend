@@ -5,15 +5,23 @@ import EpisodeRow from '../../components/EpisodeRow';
 import { getEpisodes } from '../../services/episodeService';
 
 import type { Episode } from '../../types/Episode';
+import SearchFilter from '../../components/SearchFilter';
 
 export default function Episodes() {
+  const [search, setSearch] = useState('');
   const [episodes, setEpisodes] = useState<Episode[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-
+  const isSearching = search.trim() !== '';
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const filteredEpisodes = episodes.filter((item) =>
+    item.name.toLowerCase().includes(search.toLowerCase())
+  );
 
+  function clearFilters() {
+    setSearch('');
+  }
   useEffect(() => {
     async function loadEpisodes() {
       try {
@@ -77,58 +85,64 @@ export default function Episodes() {
           Explore todos os episódios de Rick and Morty.
         </p>
       </section>
-
+      <SearchFilter
+        search={search}
+        setSearch={setSearch}
+        onClear={clearFilters}
+      />
       <EpisodeRow
         title={`Episódios - Página ${page}`}
-        items={episodes}
+        items={filteredEpisodes}
         layout="grid"
       />
 
-      <div
-        className="
-          mt-10
-          flex
-          items-center
-          justify-center
-          gap-4
-        "
-      >
-        <button
-          onClick={() => setPage((prev) => prev - 1)}
-          disabled={page === 1}
+      {!isSearching && (
+        <div
           className="
-            rounded-xl
-            bg-zinc-200
-            px-5
-            py-3
-            font-semibold
-            disabled:opacity-50
-            dark:bg-zinc-800
-          "
+      mt-10
+      flex
+      items-center
+      justify-center
+      gap-4
+    "
         >
-          ← Anterior
-        </button>
+          <button
+            onClick={() => setPage((prev) => prev - 1)}
+            disabled={page === 1}
+            className="
+        rounded-xl
+        bg-zinc-200
+        px-5
+        py-3
+        font-semibold
+        disabled:opacity-50
+        dark:bg-zinc-800
+      "
+          >
+            ← Anterior
+          </button>
 
-        <span className="font-semibold">
-          {page} / {totalPages}
-        </span>
+          <span className="font-semibold">
+            Página {page} de {totalPages}
+          </span>
 
-        <button
-          onClick={() => setPage((prev) => prev + 1)}
-          disabled={page === totalPages}
-          className="
-            rounded-xl
-            bg-cyan-500
-            px-5
-            py-3
-            font-semibold
-            text-white
-            disabled:opacity-50
-          "
-        >
-          Próxima →
-        </button>
-      </div>
+          <button
+            onClick={() => setPage((prev) => prev + 1)}
+            disabled={page === totalPages}
+            className="
+        rounded-xl
+        bg-cyan-500
+        px-5
+        py-3
+        font-semibold
+        text-white
+        disabled:opacity-50
+      "
+          >
+            Próxima →
+          </button>
+        </div>
+      )}
     </main>
   );
 }
