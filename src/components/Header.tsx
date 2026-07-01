@@ -51,7 +51,6 @@ export default function Header() {
               duration-300
               hover:scale-105
               hover:shadow-xl
-              dark:bg-zinc-800
               dark:ring-zinc-700
             "
           >

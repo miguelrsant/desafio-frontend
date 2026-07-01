@@ -12,6 +12,8 @@ import {
 import type { Location } from '../../types/Location';
 import type { Character } from '../../types/Character';
 
+import { formatUnknown } from '../../utils/formatters';
+
 export default function LocationDetails() {
   const { id } = useParams();
 
@@ -130,7 +132,7 @@ export default function LocationDetails() {
             dark:text-white
           "
         >
-          {location.name}
+          {formatUnknown(location.name)}
         </h1>
 
         <div
@@ -145,11 +147,11 @@ export default function LocationDetails() {
           "
         >
           <p>
-            <b>Tipo:</b> {location.type}
+            <b>Tipo:</b> {formatUnknown(location.type)}
           </p>
 
           <p>
-            <b>Dimensão:</b> {location.dimension}
+            <b>Dimensão:</b> {formatUnknown(location.dimension)}
           </p>
 
           <p>

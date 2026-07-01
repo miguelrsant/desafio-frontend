@@ -14,8 +14,8 @@ export default function EpisodeRow({
   layout = 'row',
 }: EpisodeRowProps) {
   return (
-    <section className="mb-12 ml-5">
-      <h2 className="mb-6 text-3xl font-bold text-zinc-900 dark:text-white">
+    <section className="mb-12">
+      <h2 className="mb-6 text-2xl font-bold text-zinc-900 dark:text-white sm:text-3xl">
         {title}
       </h2>
 
@@ -25,20 +25,26 @@ export default function EpisodeRow({
             ? `
               grid
               grid-cols-1
-              gap-6
-              pr-5
+              gap-5
               sm:grid-cols-2
               lg:grid-cols-3
               xl:grid-cols-4
             `
             : `
-              mr-5
               flex
-              gap-6
+              gap-5
               overflow-x-auto
               overflow-y-visible
-              pb-4
-              pr-8
+              pb-8
+              snap-x
+              snap-mandatory
+              scroll-smooth
+
+              [-ms-overflow-style:none]
+              [scrollbar-width:none]
+              [&::-webkit-scrollbar]:hidden
+
+              lg:gap-8
             `
         }
       >
@@ -47,109 +53,130 @@ export default function EpisodeRow({
             key={item.id}
             className={`
               group
-              relative
-              overflow-hidden
+              w-[72vw]
+              max-w-[260px]
+              shrink-0
+              snap-center
+
               rounded-2xl
+              border
+              border-zinc-200
               bg-white
-              p-6
               shadow-lg
-              ring-1
-              ring-zinc-200
-              transition-all
+
+              transition-shadow
               duration-300
-              ease-out
 
-              hover:-translate-y-1
-              hover:shadow-2xl
-              hover:ring-cyan-500/40
+              md:w-72
+              md:hover:shadow-2xl
 
+              dark:border-zinc-800
               dark:bg-zinc-900
-              dark:ring-zinc-800
-              dark:hover:ring-cyan-400/50
 
-              ${layout === 'row' ? 'w-72 shrink-0' : 'w-full'}
+              ${layout === 'grid' ? 'w-full max-w-full' : ''}
             `}
           >
-            <span
-              className="
-                inline-flex
-                rounded-full
-                bg-cyan-100
-                px-3
-                py-1
-                text-sm
-                font-semibold
-                text-cyan-700
+            <div className="overflow-hidden rounded-t-2xl">
+              <div className="relative">
+                <div
+                  className="
+                    flex
+                    h-40
+                    items-center
+                    justify-center
+                    bg-gradient-to-br
+                    from-violet-500
+                    to-cyan-500
 
-                dark:bg-cyan-900/40
-                dark:text-cyan-300
-              "
-            >
-              {formatUnknown(item.episode)}
-            </span>
+                    transition-transform
+                    duration-500
 
-            <h3
-              className="
-                mt-4
-                line-clamp-2
-                text-xl
-                font-bold
-                text-zinc-900
-                dark:text-white
-              "
-            >
-              {formatUnknown(item.name)}
-            </h3>
-
-            <div
-              className="
-                mt-4
-                space-y-2
-                text-sm
-                text-zinc-600
-                dark:text-zinc-300
-              "
-            >
-              <p>
-                <span className="font-semibold">Exibição:</span>{' '}
-                {formatUnknown(item.air_date)}
-              </p>
-
-              <p>
-                <span className="font-semibold">Criado em:</span>{' '}
-                {new Date(formatUnknown(item.created)).toLocaleDateString(
-                  'pt-BR'
-                )}
-              </p>
+                    group-hover:scale-120
+                  "
+                >
+                  <span className="text-4xl">📺</span>
+                </div>
+              </div>
             </div>
 
-            <Link
-              to={`/episodes/${item.id}`}
-              className="
-                mt-6
-                inline-flex
-                w-full
-                items-center
-                justify-center
-                rounded-xl
-                bg-gradient-to-r
-                from-violet-500
-                to-cyan-500
-                py-3
-                font-semibold
-                text-white
-                shadow-md
-                transition-all
-                duration-300
+            <div className="p-5">
+              <span
+                className="
+                  inline-flex
+                  rounded-full
+                  bg-cyan-100
+                  px-3
+                  py-1
+                  text-sm
+                  font-semibold
+                  text-cyan-700
+                  
+                  dark:bg-cyan-900/40
+                  dark:text-cyan-300
+                "
+              >
+                {formatUnknown(item.episode)}
+              </span>
 
-                hover:-translate-y-0.5
-                hover:shadow-xl
+              <h3
+                className="
+                  mt-4
+                  line-clamp-2
+                  text-xl
+                  font-bold
+                  text-zinc-900
+                  dark:text-white
+                "
+              >
+                {formatUnknown(item.name)}
+              </h3>
 
-                active:scale-95
-              "
-            >
-              Saiba mais →
-            </Link>
+              <div
+                className="
+                  mt-4
+                  space-y-2
+                  text-sm
+                  text-zinc-600
+                  dark:text-zinc-300
+                "
+              >
+                <p>
+                  <span className="font-semibold">Exibição:</span>{' '}
+                  {formatUnknown(item.air_date)}
+                </p>
+
+                <p>
+                  <span className="font-semibold">Criado em:</span>{' '}
+                  {new Date(item.created).toLocaleDateString('pt-BR')}
+                </p>
+              </div>
+
+              <Link
+                to={`/episodes/${item.id}`}
+                className="
+                  mt-6
+                  flex
+                  w-full
+                  items-center
+                  justify-center
+                  rounded-xl
+                  bg-gradient-to-r
+                  from-violet-500
+                  to-cyan-500
+                  py-3
+                  font-semibold
+                  text-white
+                  shadow-md
+                  transition
+              
+                  md:hover:shadow-xl
+                  md:hover:scale-[1.02]
+                  active:scale-95
+                "
+              >
+                Saiba mais →
+              </Link>
+            </div>
           </article>
         ))}
       </div>

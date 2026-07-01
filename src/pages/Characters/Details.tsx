@@ -11,6 +11,8 @@ import { getCharacters } from '../../services/characterService';
 import type { Character } from '../../types/Character';
 import type { Episode } from '../../types/Episode';
 
+import { formatUnknown } from '../../utils/formatters';
+
 export default function CharacterDetails() {
   const { id } = useParams();
 
@@ -116,7 +118,7 @@ export default function CharacterDetails() {
               dark:text-white
             "
           >
-            {character.name}
+            {formatUnknown(character.name)}
           </h1>
 
           <span
@@ -139,7 +141,7 @@ export default function CharacterDetails() {
               }
             `}
           >
-            {character.status}
+            {formatUnknown(character.status)}
           </span>
 
           <div
@@ -153,19 +155,19 @@ export default function CharacterDetails() {
             "
           >
             <p>
-              <b>Espécie:</b> {character.species}
+              <b>Espécie:</b> {formatUnknown(character.species)}
             </p>
 
             <p>
-              <b>Gênero:</b> {character.gender}
+              <b>Gênero:</b> {formatUnknown(character.gender)}
             </p>
 
             <p>
-              <b>Origem:</b> {character.origin.name}
+              <b>Origem:</b> {formatUnknown(character.origin.name)}
             </p>
 
             <p>
-              <b>Localização:</b> {character.location.name}
+              <b>Localização:</b> {formatUnknown(character.location.name)}
             </p>
           </div>
         </div>

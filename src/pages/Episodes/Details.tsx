@@ -12,6 +12,8 @@ import {
 import type { Episode } from '../../types/Episode';
 import type { Character } from '../../types/Character';
 
+import { formatUnknown } from '../../utils/formatters';
+
 export default function EpisodeDetails() {
   const { id } = useParams();
   const [episodes, setEpisodes] = useState<Episode[]>([]);
@@ -126,7 +128,7 @@ export default function EpisodeDetails() {
             text-white
           "
         >
-          {episode.episode}
+          {formatUnknown(episode.episode)}
         </span>
 
         <h1
@@ -137,7 +139,7 @@ export default function EpisodeDetails() {
             dark:text-white
           "
         >
-          {episode.name}
+          {formatUnknown(episode.name)}
         </h1>
 
         <div
@@ -149,7 +151,7 @@ export default function EpisodeDetails() {
           "
         >
           <p>
-            <b>Data:</b> {episode.air_date}
+            <b>Data:</b> {formatUnknown(episode.air_date)}
           </p>
 
           <p>

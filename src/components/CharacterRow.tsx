@@ -14,8 +14,8 @@ export default function CharacterRow({
   layout = 'row',
 }: CharacterRowProps) {
   return (
-    <section className="mb-12 ml-5">
-      <h2 className="mb-6 text-3xl font-bold text-zinc-900 dark:text-white">
+    <section className="mb-12">
+      <h2 className="mb-6 text-2xl font-bold text-zinc-900 dark:text-white sm:text-3xl">
         {title}
       </h2>
 
@@ -23,64 +23,75 @@ export default function CharacterRow({
         className={
           layout === 'grid'
             ? `
-            grid
-            grid-cols-1
-            gap-6
-            pr-5
-            sm:grid-cols-2
-            lg:grid-cols-3
-            xl:grid-cols-4
-          `
+              grid
+              grid-cols-1
+              gap-5
+              sm:grid-cols-2
+              lg:grid-cols-3
+              xl:grid-cols-4
+            `
             : `
-            mr-5
-            flex
-            gap-6
-            overflow-x-auto
-            pb-4
-            scrollbar-thin
-          `
+              flex
+              gap-5
+              overflow-x-auto
+              overflow-y-visible
+              pb-8
+              snap-x
+              snap-mandatory
+              scroll-smooth
+
+              [-ms-overflow-style:none]
+              [scrollbar-width:none]
+              [&::-webkit-scrollbar]:hidden
+
+              lg:gap-8
+            `
         }
       >
         {items.map((item) => (
           <article
             key={item.id}
-            className="
-              group
-              w-72
-              shrink-0
-              overflow-hidden
-              rounded-2xl
-              bg-white
-              shadow-lg
-              transition-all
-              duration-300
-              hover:-translate-y-2
-              hover:shadow-2xl
-              dark:bg-zinc-900
+            className={`
+            group
+            w-[72vw]
+            max-w-[260px]
+            shrink-0
+            snap-center
 
-              ${
-                layout === 'grid'
-                  ? 'w-full'
-                  : ''
-              }
-            "
+            rounded-2xl
+            border border-zinc-200
+            bg-white
+            shadow-lg
+
+            transition-shadow
+            duration-300
+
+            md:w-72
+            md:hover:shadow-2xl
+
+            dark:border-zinc-800
+            dark:bg-zinc-900
+
+            ${layout === 'grid' ? 'w-full max-w-full' : ''}
+          `}
           >
-            <div className="relative overflow-hidden">
-              <img
-                src={item.image}
-                alt={item.name}
-                className="
+            <div className="overflow-hidden rounded-t-2xl">
+              <div className="relative">
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  className="
                   h-72
                   w-full
                   object-cover
                   transition-transform
                   duration-500
-                  group-hover:scale-110
+                  group-hover:scale-120
                 "
-              />
+                />
 
-              <span
-                className={`
+                <span
+                  className={`
                   absolute
                   top-4
                   right-4
@@ -99,32 +110,18 @@ export default function CharacterRow({
                         : 'bg-gray-500'
                   }
                 `}
-              >
-                {formatUnknown(item.status)}
-              </span>
+                >
+                  {formatUnknown(item.status)}
+                </span>
+              </div>
             </div>
 
             <div className="space-y-2 p-5">
-              <h3
-                className="
-                truncate
-                text-2xl
-                font-bold
-                text-zinc-900
-                dark:text-white
-              "
-              >
+              <h3 className="truncate text-2xl font-bold text-zinc-900 dark:text-white">
                 {formatUnknown(item.name)}
               </h3>
 
-              <div
-                className="
-                space-y-1
-                text-sm
-                text-zinc-600
-                dark:text-zinc-300
-              "
-              >
+              <div className="space-y-1 text-sm text-zinc-600 dark:text-zinc-300">
                 <p>
                   <b>Species:</b> {formatUnknown(item.species)}
                 </p>
@@ -154,7 +151,9 @@ export default function CharacterRow({
                   font-semibold
                   text-white
                   transition
-                  hover:scale-105
+                  
+
+                  md:hover:scale-[1.02]
                 "
               >
                 Saiba mais →
